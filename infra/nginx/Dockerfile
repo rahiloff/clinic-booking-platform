@@ -7,7 +7,7 @@ COPY frontend/pubspec.* ./
 RUN flutter pub get
 
 COPY frontend/ .
-RUN flutter build web --release --web-renderer canvaskit
+RUN flutter build web --release
 
 # Stage 2: Nginx Web Server
 FROM nginx:alpine
