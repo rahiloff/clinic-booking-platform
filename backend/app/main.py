@@ -24,8 +24,16 @@ from app.api.v1.router import api_v1_router
 from app.db.session import engine
 from app.middleware.request_logging import RequestLoggingMiddleware
 
+import sentry_sdk
+
 logger = structlog.get_logger()
 
+if settings.SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=settings.SENTRY_DSN,
+        traces_sample_rate=1.0,
+        environment=settings.ENVIRONMENT,
+    )
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:

@@ -46,6 +46,9 @@ class Settings(BaseSettings):
     # ---------- CORS ----------
     CORS_ORIGINS: str = "http://localhost:3000,http://localhost:8080"
 
+    # ---------- Sentry ----------
+    SENTRY_DSN: str | None = None
+
     # ---------- Derived Properties ----------
 
     @property

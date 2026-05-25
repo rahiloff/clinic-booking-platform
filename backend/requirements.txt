@@ -39,6 +39,7 @@ structlog==24.4.0
 # ---------- Utilities ----------
 python-dotenv==1.0.1
 firebase-admin==6.5.0
+sentry-sdk==2.1.1
 
 # ---------- Testing ----------
 pytest==8.2.0

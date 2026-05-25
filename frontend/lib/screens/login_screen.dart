@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../providers/auth_provider.dart';
 import '../services/auth_service.dart';
 import '../widgets/common/app_button.dart';
@@ -14,47 +15,85 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _phoneController = TextEditingController();
   final _otpController = TextEditingController();
+  
   bool _isOtpSent = false;
   bool _isLoading = false;
+  String _verificationId = '';
 
   void _requestOtp() async {
-    if (_phoneController.text.length < 10) return;
+    final phone = _phoneController.text.trim();
+    if (phone.length < 10) return;
+    
     setState(() => _isLoading = true);
     
-    // Simulate Firebase OTP trigger
-    await Future.delayed(const Duration(seconds: 1));
-    
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-        _isOtpSent = true;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Test OTP Sent. Enter anything to login.')),
+    try {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phone,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          // Auto-resolution on Android devices
+          await _signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          setState(() => _isLoading = false);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message ?? 'Verification failed'), backgroundColor: Colors.red));
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          if (mounted) {
+            setState(() {
+              _verificationId = verificationId;
+              _isOtpSent = true;
+              _isLoading = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('OTP SMS Sent!')));
+          }
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          _verificationId = verificationId;
+        },
       );
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()), backgroundColor: Colors.red));
     }
   }
 
   void _verifyOtpAndLogin() async {
+    final smsCode = _otpController.text.trim();
+    if (smsCode.length < 6) return;
+
     setState(() => _isLoading = true);
-    
     try {
-      // In production, this verifies with Firebase, gets the Firebase JWT,
-      // and passes it to our backend. For MVP demo purposes:
+      final credential = PhoneAuthProvider.credential(
+        verificationId: _verificationId,
+        smsCode: smsCode,
+      );
+      await _signInWithCredential(credential);
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invalid OTP Code'), backgroundColor: Colors.red));
+      }
+    }
+  }
+
+  Future<void> _signInWithCredential(PhoneAuthCredential credential) async {
+    try {
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final idToken = await userCredential.user?.getIdToken();
+      
+      if (idToken == null) throw Exception("Failed to retrieve Firebase ID Token");
+
+      // Exchange Firebase Token for Backend JWT
       final authService = ref.read(authServiceProvider);
-      // We send a mock token to the backend that should be handled by our mock auth flow
-      final tokenData = await authService.loginWithFirebaseToken('mock_firebase_token');
+      final tokenData = await authService.loginWithFirebaseToken(idToken);
       
       final accessToken = tokenData['access_token'];
-      // The backend should return the role. We'll default to patient if missing.
       final role = tokenData['role'] ?? 'patient';
       
       await ref.read(authProvider.notifier).login(accessToken, role);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()), backgroundColor: Colors.red));
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
