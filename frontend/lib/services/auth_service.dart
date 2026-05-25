@@ -21,7 +21,12 @@ class AuthService {
       
       final data = response.data;
       if (data['success'] == true) {
-        return data['data']; // Returns { "access_token": "...", "token_type": "bearer" }
+        final tokenObj = data['data']['token'];
+        final userObj = data['data']['user'];
+        return {
+          'access_token': tokenObj['access_token'],
+          'role': userObj['role'],
+        };
       } else {
         throw Exception(data['message'] ?? 'Login failed');
       }
