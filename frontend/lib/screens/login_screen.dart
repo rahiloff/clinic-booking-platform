@@ -24,6 +24,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final phone = _phoneController.text.trim();
     if (phone.length < 10) return;
     
+    // Developer testing backdoor to bypass Firebase completely
+    if (phone == '0000000000' || phone == '+10000000000') {
+      setState(() => _isLoading = true);
+      try {
+        final authService = ref.read(authServiceProvider);
+        final tokenData = await authService.loginWithFirebaseToken('test_token');
+        await ref.read(authProvider.notifier).login(tokenData['access_token'], tokenData['role'] ?? 'patient');
+      } catch (e) {
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()), backgroundColor: Colors.red));
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
+      return;
+    }
+    
     setState(() => _isLoading = true);
     
     try {
