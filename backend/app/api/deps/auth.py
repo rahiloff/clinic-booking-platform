@@ -40,9 +40,15 @@ async def get_current_user(
     if payload.get("token_type") != "access":
         raise AuthenticationError("Invalid token type")
 
-    user_id = payload.get("sub")
-    if not user_id:
+    user_id_str = payload.get("sub")
+    if not user_id_str:
         raise AuthenticationError("Token payload missing subject")
+
+    from uuid import UUID
+    try:
+        user_id = UUID(user_id_str)
+    except ValueError:
+        raise AuthenticationError("Invalid user ID format in token")
 
     user_repo = UserRepository(db)
     user = await user_repo.get_by_id(user_id)

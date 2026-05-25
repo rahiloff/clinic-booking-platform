@@ -58,18 +58,20 @@ def success(data: Any = None, message: str = "Success") -> dict:
 
 
 def paginated(
-    items: list,
+    data: list,
     total: int,
-    page: int,
-    page_size: int,
+    skip: int,
+    limit: int,
     message: str = "Success",
 ) -> dict:
     """Build a paginated response dict."""
-    total_pages = (total + page_size - 1) // page_size if page_size > 0 else 0
+    page_size = limit
+    page = (skip // limit) + 1 if limit > 0 else 1
+    total_pages = (total + limit - 1) // limit if limit > 0 else 0
     return {
         "success": True,
         "message": message,
-        "data": items,
+        "data": data,
         "pagination": {
             "total": total,
             "page": page,

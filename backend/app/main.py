@@ -58,8 +58,14 @@ def create_app() -> FastAPI:
     """
     app = FastAPI(
         title=settings.PROJECT_NAME,
-        version="0.1.0",
-        description="Doctor Appointment Booking Platform API",
+        version="1.0.0",
+        description=(
+            "Doctor Appointment Booking Platform API.\\n\\n"
+            "## Authentication\\n"
+            "All protected routes require a JWT Bearer token obtained from `/api/v1/auth/login`.\\n\\n"
+            "## Responses\\n"
+            "All endpoints return a standardized JSON structure: `{success: bool, message: str, data: dict|list}`."
+        ),
         openapi_url=f"{settings.API_V1_PREFIX}/openapi.json",
         docs_url="/docs",
         redoc_url="/redoc",
