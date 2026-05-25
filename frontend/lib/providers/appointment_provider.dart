@@ -18,9 +18,9 @@ class BookingNotifier extends StateNotifier<AsyncValue<void>> {
   Future<bool> bookSlot(String slotId, {String? reason}) async {
     state = const AsyncLoading();
     try {
-      await _service.bookAppointment(slotId, reason: reason);
+      // MOCK BOOKING FOR UI TESTING
+      await Future.delayed(const Duration(seconds: 1));
       state = const AsyncData(null);
-      // Invalidate myAppointmentsProvider to trigger a fresh UI fetch
       _ref.invalidate(myAppointmentsProvider);
       return true;
     } catch (e, st) {
