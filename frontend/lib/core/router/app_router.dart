@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/home_screen.dart';
-// import '../../screens/doctor_details_screen.dart';
-// import '../../screens/my_appointments_screen.dart';
-// import '../../screens/doctor_dashboard_screen.dart';
+import '../../screens/doctor_details_screen.dart';
+import '../../screens/my_appointments_screen.dart';
+import '../../models/doctor.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -32,7 +32,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/home',
         builder: (context, state) => const HomeScreen(),
       ),
-      // Future routes mapping to Steps 7, 9, 10
+      GoRoute(
+        path: '/appointments',
+        builder: (context, state) => const MyAppointmentsScreen(),
+      ),
+      GoRoute(
+        path: '/doctor/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final doctor = state.extra as Doctor?;
+          return DoctorDetailsScreen(doctorId: id, initialDoctor: doctor);
+        },
+      ),
     ],
   );
 });
