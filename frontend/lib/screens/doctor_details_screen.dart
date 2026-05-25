@@ -98,7 +98,7 @@ class _DoctorDetailsScreenState extends ConsumerState<DoctorDetailsScreen> {
                       radius: 40,
                       backgroundColor: theme.colorScheme.primary.withAlpha(25),
                       child: Text(
-                        doc.user?.fullName.substring(0, 1) ?? 'D',
+                        doc.user != null && doc.user!.fullName.isNotEmpty ? doc.user!.fullName.substring(0, 1) : 'D',
                         style: theme.textTheme.headlineMedium?.copyWith(color: theme.colorScheme.primary),
                       ),
                     ),
