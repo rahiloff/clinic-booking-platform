@@ -44,6 +44,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return DoctorDetailsScreen(doctorId: id, initialDoctor: doctor);
         },
       ),
+      GoRoute(
+        path: '/dashboard',
+        builder: (context, state) => const DoctorDashboardScreen(),
+      ),
     ],
   );
 });

@@ -14,6 +14,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final doctorsAsync = ref.watch(doctorsProvider);
+    final authState = ref.watch(authProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -21,6 +22,12 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Find a Doctor', style: TextStyle(fontWeight: FontWeight.w600)),
         actions: [
+          if (authState.role == 'doctor')
+            IconButton(
+              icon: const Icon(Icons.admin_panel_settings),
+              tooltip: 'Doctor Dashboard',
+              onPressed: () => context.push('/dashboard'),
+            ),
           IconButton(
             icon: const Icon(Icons.calendar_today_outlined),
             tooltip: 'My Appointments',
