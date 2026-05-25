@@ -29,7 +29,7 @@ class DoctorCard extends StatelessWidget {
                 radius: 32,
                 backgroundColor: theme.colorScheme.primary.withAlpha(25),
                 child: Text(
-                  doctor.user?.fullName.substring(0, 1) ?? 'D',
+                  doctor.user != null && doctor.user!.fullName.isNotEmpty ? doctor.user!.fullName.substring(0, 1) : 'D',
                   style: theme.textTheme.headlineSmall?.copyWith(
                     color: theme.colorScheme.primary,
                   ),
