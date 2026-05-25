@@ -16,7 +16,7 @@ class AuthService {
   Future<Map<String, dynamic>> loginWithFirebaseToken(String firebaseToken) async {
     try {
       final response = await _dio.post('/auth/login', data: {
-        'firebase_id_token': firebaseToken,
+        'firebase_token': firebaseToken,
       });
       
       final data = response.data;
