@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from app.core.config import settings  # noqa: E402
 from app.db.base import Base  # noqa: E402
 
-# Import all models here so Alembic can detect them
-# from app.models.user import User  # noqa: E402  (uncomment in Phase 2)
+# Import all models so Alembic can detect them for autogenerate
+import app.models  # noqa: F401 — triggers model registry
 
 # Alembic Config object
 config = context.config

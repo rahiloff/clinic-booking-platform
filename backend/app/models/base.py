@@ -1,31 +1,27 @@
 """
-Doctor Booking Platform — Base Model Mixin
+Doctor Booking Platform — Base Model
 
-Provides reusable columns that every model needs:
-- UUID primary key
-- created_at / updated_at timestamps
-
-All domain models should inherit from BaseModel instead of Base directly.
+Abstract base providing UUID primary key and audit timestamps.
+All domain models inherit from this instead of Base directly.
 """
 
 import uuid
-from datetime import datetime
 
-from sqlalchemy import DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
+from app.models.mixins.timestamp import TimestampMixin
 
 
-class BaseModel(Base):
+class BaseModel(TimestampMixin, Base):
     """
     Abstract base model with UUID PK and audit timestamps.
 
-    Usage:
-        class User(BaseModel):
-            __tablename__ = "users"
-            name: Mapped[str] = mapped_column(...)
+    Provides:
+        - id: UUID v4 primary key
+        - created_at: server-managed creation timestamp
+        - updated_at: server-managed update timestamp
     """
 
     __abstract__ = True
@@ -34,18 +30,4 @@ class BaseModel(Base):
         UUID(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
-        index=True,
-    )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
-
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
     )
