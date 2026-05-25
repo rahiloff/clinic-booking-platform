@@ -1,5 +1,5 @@
 # Stage 1: Build the Flutter Web application
-FROM ghcr.io/cirruslabs/flutter:stable AS build-frontend
+FROM ghcr.io/cirruslabs/flutter:stable AS builder
 
 WORKDIR /app
 
@@ -16,6 +16,6 @@ FROM nginx:alpine
 COPY infra/nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Copy compiled Flutter web assets from Stage 1
-COPY --from=build-frontend /app/build/web /usr/share/nginx/html
+COPY --from=builder /app/build/web /usr/share/nginx/html
 
 EXPOSE 80 443
