@@ -4,8 +4,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final apiClientProvider = Provider<Dio>((ref) {
-  // Use dotenv for base URL, default to local if not found
-  final baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://localhost/api/v1';
+  // Use a completely relative URL by default so the Flutter Web app dynamically
+  // resolves to the exact EC2 Public IP or domain Nginx is serving it from!
+  final baseUrl = dotenv.env['API_BASE_URL'] ?? '/api/v1';
 
   final dio = Dio(
     BaseOptions(
