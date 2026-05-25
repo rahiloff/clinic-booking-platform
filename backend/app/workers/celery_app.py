@@ -35,4 +35,4 @@ celery_app.conf.update(
 )
 
 # Auto-discover tasks from all app modules
-# celery_app.autodiscover_tasks(["app.workers"])
+celery_app.autodiscover_tasks(["app.workers"])

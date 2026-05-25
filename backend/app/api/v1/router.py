@@ -7,7 +7,7 @@ Mounted at /api/v1 in main.py.
 
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import health, auth
+from app.api.v1.endpoints import health, auth, doctors, appointments, doctor_dashboard
 
 api_v1_router = APIRouter()
 
@@ -24,6 +24,23 @@ api_v1_router.include_router(
     tags=["Authentication"],
 )
 
-# Future routers will be added here:
-# api_v1_router.include_router(doctors.router, prefix="/doctors", tags=["Doctors"])
-# api_v1_router.include_router(appointments.router, prefix="/appointments", tags=["Appointments"])
+# --- Doctors (Public Lookups) ---
+api_v1_router.include_router(
+    doctors.router,
+    prefix="/doctors",
+    tags=["Doctors"],
+)
+
+# --- Appointments (Patient Actions) ---
+api_v1_router.include_router(
+    appointments.router,
+    prefix="/appointments",
+    tags=["Appointments"],
+)
+
+# --- Doctor Dashboard (Secured Doctor Actions) ---
+api_v1_router.include_router(
+    doctor_dashboard.router,
+    prefix="/doctor",
+    tags=["Doctor Dashboard"],
+)
