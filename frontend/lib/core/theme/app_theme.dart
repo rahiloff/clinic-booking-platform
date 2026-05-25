@@ -56,7 +56,7 @@ class AppTheme {
           borderSide: const BorderSide(color: primaryColor, width: 2),
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: surfaceColor,
         elevation: 2,
         shadowColor: Colors.black.withAlpha(13),
