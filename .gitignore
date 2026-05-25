@@ -1,0 +1,64 @@
+# ========================
+# Python
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+backend/venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ========================
+# Flutter
+# ========================
+frontend/.dart_tool/
+frontend/build/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/.pub-cache/
+frontend/.pub/
+
+# ========================
+# Environment
+# ========================
+.env
+!.env.example
+
+# ========================
+# Docker
+# ========================
+postgres_data/
+redis_data/
+
+# ========================
+# IDE
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# ========================
+# OS
+# ========================
+.DS_Store
+Thumbs.db
+*.log
+
+# ========================
+# Misc
+# ========================
+*.pyc
+.coverage
+htmlcov/
+.mypy_cache/
+.pytest_cache/
