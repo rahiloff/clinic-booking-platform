@@ -56,6 +56,11 @@ class SlotQuery {
 
 // Provides available slots for a specific doctor on a specific date
 final doctorSlotsProvider = FutureProvider.family.autoDispose<List<Slot>, SlotQuery>((ref, query) async {
-  // Return empty list for now
-  return [];
+  // MOCK SLOTS FOR UI TESTING
+  return [
+    Slot(id: 'slot1', doctorId: query.doctorId, date: query.date, startTime: '09:00:00', endTime: '09:30:00', status: 'available'),
+    Slot(id: 'slot2', doctorId: query.doctorId, date: query.date, startTime: '10:00:00', endTime: '10:30:00', status: 'available'),
+    Slot(id: 'slot3', doctorId: query.doctorId, date: query.date, startTime: '11:00:00', endTime: '11:30:00', status: 'booked'),
+    Slot(id: 'slot4', doctorId: query.doctorId, date: query.date, startTime: '14:00:00', endTime: '14:30:00', status: 'available'),
+  ];
 });
