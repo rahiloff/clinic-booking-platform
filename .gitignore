@@ -30,6 +30,7 @@ frontend/.pub/
 # Environment
 # ========================
 .env
+.env.*
 !.env.example
 
 # ========================
