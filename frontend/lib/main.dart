@@ -9,11 +9,19 @@ import 'providers/auth_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Load environment variables
-  await dotenv.load(fileName: ".env");
+  // Load environment variables gracefully
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint("Could not load .env file: $e");
+  }
   
-  // Initialize Firebase (Assuming Web setup is provided in index.html or options)
-  await Firebase.initializeApp();
+  // Initialize Firebase gracefully for Web
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint("Firebase init failed (missing web config): $e");
+  }
   
   // Initialize SharedPreferences globally
   final prefs = await SharedPreferences.getInstance();
