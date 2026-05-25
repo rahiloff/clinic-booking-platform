@@ -1,5 +1,5 @@
 # Stage 1: Build the Flutter Web application
-FROM ghcr.io/cirruslabs/flutter:3.19.5 AS build-frontend
+FROM ghcr.io/cirruslabs/flutter:stable AS build-frontend
 
 WORKDIR /app
 
