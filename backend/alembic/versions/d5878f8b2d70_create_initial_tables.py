@@ -42,10 +42,7 @@ appointment_status = sa.Enum(
 def upgrade() -> None:
     """Create all initial tables with indexes and constraints."""
 
-    # === ENUMS (created automatically by SA, but explicit for clarity) ===
-    user_role.create(op.get_bind(), checkfirst=True)
-    slot_status.create(op.get_bind(), checkfirst=True)
-    appointment_status.create(op.get_bind(), checkfirst=True)
+    # === ENUMS are created automatically by Alembic during create_table ===
 
     # === USERS ===
     op.create_table(
