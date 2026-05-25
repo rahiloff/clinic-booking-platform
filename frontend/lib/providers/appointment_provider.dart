@@ -2,10 +2,34 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/appointment_service.dart';
 import '../models/appointment.dart';
 
+import '../models/doctor.dart';
+import '../models/user.dart';
+
 // Provides a reactive list of the patient's appointments
 final myAppointmentsProvider = FutureProvider.autoDispose<List<Appointment>>((ref) async {
-  final service = ref.watch(appointmentServiceProvider);
-  return service.getMyAppointments();
+  // MOCK APPOINTMENTS FOR UI TESTING
+  return [
+    Appointment(
+      id: 'app1',
+      patientId: 'patient1',
+      doctorId: 'doc1',
+      slotId: 'slot1',
+      date: '2026-05-30',
+      startTime: '09:00:00',
+      endTime: '09:30:00',
+      status: 'confirmed',
+      doctor: Doctor(
+        id: 'doc1',
+        userId: 'user1',
+        specialization: 'Cardiologist',
+        bio: 'Expert in heart diseases.',
+        consultationFee: 15000,
+        experienceYears: 10,
+        isAvailable: true,
+        user: User(id: 'user1', phone: '1234567890', fullName: 'Dr. Gregory House', role: 'doctor'),
+      ),
+    ),
+  ];
 });
 
 // StateNotifier for imperative booking actions (handling loading state during POST)
