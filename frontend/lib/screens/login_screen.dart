@@ -21,55 +21,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   String _verificationId = '';
 
   void _requestOtp() async {
-    final phone = _phoneController.text.trim();
-    if (phone.length < 10) return;
-    
-    // Developer testing backdoor to bypass Firebase completely
-    if (phone == '0000000000' || phone == '+10000000000') {
-      setState(() => _isLoading = true);
-      try {
-        final authService = ref.read(authServiceProvider);
-        final tokenData = await authService.loginWithFirebaseToken('test_token');
-        await ref.read(authProvider.notifier).login(tokenData['access_token'], tokenData['role'] ?? 'patient');
-      } catch (e) {
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()), backgroundColor: Colors.red));
-      } finally {
-        if (mounted) setState(() => _isLoading = false);
-      }
-      return;
-    }
-    
-    setState(() => _isLoading = true);
-    
-    try {
-      await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phone,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          // Auto-resolution on Android devices
-          await _signInWithCredential(credential);
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          setState(() => _isLoading = false);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message ?? 'Verification failed'), backgroundColor: Colors.red));
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          if (mounted) {
-            setState(() {
-              _verificationId = verificationId;
-              _isOtpSent = true;
-              _isLoading = false;
-            });
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('OTP SMS Sent!')));
-          }
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          _verificationId = verificationId;
-        },
-      );
-    } catch (e) {
-      setState(() => _isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()), backgroundColor: Colors.red));
-    }
+    // COMPLETELY STOP FIREBASE AND OTP FOR TESTING
+    // Instantly jump to the Dashboard
+    await ref.read(authProvider.notifier).login('dummy_token_for_testing', 'patient');
+    return;
   }
 
   void _verifyOtpAndLogin() async {
