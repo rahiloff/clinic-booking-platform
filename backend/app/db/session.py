@@ -4,11 +4,19 @@ Doctor Booking Platform — Database Session Management
 Provides:
 - Async SQLAlchemy engine with connection pooling
 - Async session factory
-- Dependency-injectable session generator
+- Dependency-injectable session generator with auto-commit/rollback
+
+Transaction Strategy (Unit of Work):
+- get_db() yields a session for the duration of a request
+- If the request succeeds → auto-commit
+- If any exception is raised → auto-rollback
+- Repositories use flush() only, never commit()
+- This guarantees atomic operations per request
 """
 
 from collections.abc import AsyncGenerator
 
+import structlog
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -16,6 +24,8 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from app.core.config import settings
+
+logger = structlog.get_logger()
 
 # ---------- Engine ----------
 # pool_pre_ping: Validates connections before use (handles stale connections)
@@ -40,16 +50,23 @@ AsyncSessionLocal = async_sessionmaker(
 # ---------- Dependency ----------
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
-    Dependency-injectable async database session.
+    Dependency-injectable async database session with auto-commit/rollback.
 
     Usage in routes:
         async def my_route(db: AsyncSession = Depends(get_db)):
             ...
 
-    Sessions are automatically closed after the request completes.
+    Transaction lifecycle:
+        - Success: session.commit() is called automatically
+        - Exception: session.rollback() is called, then exception re-raised
+        - Always: session.close() is called
     """
     async with AsyncSessionLocal() as session:
         try:
             yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
         finally:
             await session.close()

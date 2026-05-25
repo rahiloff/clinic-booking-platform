@@ -1,14 +1,15 @@
 """
 Doctor Booking Platform — Health Check Schema
 
-Pydantic models for the health check endpoint response.
+Pydantic models for the health check endpoint.
+Uses the standardized APIResponse wrapper.
 """
 
 from pydantic import BaseModel
 
 
-class HealthResponse(BaseModel):
-    """Response schema for GET /api/v1/health."""
+class HealthData(BaseModel):
+    """Health check data payload."""
 
     status: str
     environment: str
