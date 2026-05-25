@@ -1,5 +1,5 @@
 # Stage 1: Build the Flutter Web application
-FROM ghcr.io/cirruslabs/flutter:stable AS builder
+FROM ghcr.io/cirruslabs/flutter:3.19.5 AS builder
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ COPY frontend/pubspec.* ./
 RUN flutter pub get
 
 COPY frontend/ .
-RUN flutter build web --release
+RUN flutter build web --release --web-renderer canvaskit
 
 # Stage 2: Nginx Web Server
 FROM nginx:alpine
