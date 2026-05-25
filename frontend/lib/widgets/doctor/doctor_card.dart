@@ -27,7 +27,7 @@ class DoctorCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 32,
-                backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                backgroundColor: theme.colorScheme.primary.withAlpha(25),
                 child: Text(
                   doctor.user?.fullName.substring(0, 1) ?? 'D',
                   style: theme.textTheme.headlineSmall?.copyWith(

@@ -96,7 +96,7 @@ class _DoctorDetailsScreenState extends ConsumerState<DoctorDetailsScreen> {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                      backgroundColor: theme.colorScheme.primary.withAlpha(25),
                       child: Text(
                         doc.user?.fullName.substring(0, 1) ?? 'D',
                         style: theme.textTheme.headlineMedium?.copyWith(color: theme.colorScheme.primary),

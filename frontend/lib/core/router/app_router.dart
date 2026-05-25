@@ -6,6 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/home_screen.dart';
 import '../../screens/doctor_details_screen.dart';
+import '../../screens/doctor_dashboard_screen.dart';
 import '../../screens/my_appointments_screen.dart';
 import '../../models/doctor.dart';
 

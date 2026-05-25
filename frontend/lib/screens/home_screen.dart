@@ -18,7 +18,7 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         title: const Text('Find a Doctor', style: TextStyle(fontWeight: FontWeight.w600)),
         actions: [

@@ -56,7 +56,7 @@ class DashboardActionsNotifier extends StateNotifier<AsyncValue<void>> {
   Future<bool> generateSlots(int weeks) async {
     state = const AsyncLoading();
     try {
-      final msg = await _service.generateSlots(weeks);
+      await _service.generateSlots(weeks);
       // We pass the success message back inside the data payload dynamically for the UI
       state = const AsyncData(null); 
       return true;

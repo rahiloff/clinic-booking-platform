@@ -18,7 +18,7 @@ class LoadingView extends StatelessWidget {
             Text(
               message!,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                color: Theme.of(context).colorScheme.onSurface.withAlpha((0.6 * 255).toInt()),
               ),
             ),
           ]

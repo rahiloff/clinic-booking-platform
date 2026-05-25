@@ -113,7 +113,7 @@ class _DoctorScheduleManagementViewState extends ConsumerState<DoctorScheduleMan
 
             // Add Schedule Form Form
             DropdownButtonFormField<int>(
-              value: _selectedDay,
+              initialValue: _selectedDay,
               decoration: const InputDecoration(labelText: 'Day of Week'),
               items: List.generate(7, (i) => DropdownMenuItem(value: i, child: Text(_days[i]))),
               onChanged: (v) => setState(() => _selectedDay = v!),
@@ -150,7 +150,7 @@ class _DoctorScheduleManagementViewState extends ConsumerState<DoctorScheduleMan
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              value: _slotDuration,
+              initialValue: _slotDuration,
               decoration: const InputDecoration(labelText: 'Slot Duration (minutes)'),
               items: const [
                 DropdownMenuItem(value: 15, child: Text('15 Minutes')),

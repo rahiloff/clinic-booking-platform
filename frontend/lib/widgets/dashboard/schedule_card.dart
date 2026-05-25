@@ -31,7 +31,7 @@ class ScheduleCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.1),
+                color: theme.colorScheme.primary.withAlpha(25), // 0.1 * 255 ≈ 25
                 borderRadius: BorderRadius.circular(8),
               ),
               alignment: Alignment.center,
